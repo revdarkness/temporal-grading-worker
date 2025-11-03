@@ -1,0 +1,26 @@
+{
+  "criteria": [
+    {
+      "name": "Completeness",
+      "description": "All required sections and elements are present. The submission addresses all parts of the assignment.",
+      "maxPoints": 25
+    },
+    {
+      "name": "Accuracy",
+      "description": "Information provided is correct, well-researched, and factually sound. Sources are cited where appropriate.",
+      "maxPoints": 25
+    },
+    {
+      "name": "Clarity and Organization",
+      "description": "Writing is clear, well-organized, and easy to understand. Ideas flow logically and are well-structured.",
+      "maxPoints": 25
+    },
+    {
+      "name": "Quality and Presentation",
+      "description": "Overall quality of work shows attention to detail, professionalism, and effort. Formatting is consistent.",
+      "maxPoints": 25
+    }
+  ],
+  "totalPoints": 100,
+  "passingScore": 70
+}

@@ -1,0 +1,27 @@
+{
+  "name": "temporal-grading-worker",
+  "version": "1.0.0",
+  "description": "Temporal worker that grades Google Drive submissions using Gemini",
+  "main": "dist/worker.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/worker.js",
+    "dev": "ts-node src/worker.ts",
+    "watch": "ts-node src/file-watcher.ts",
+    "test": "ts-node src/test-client.ts"
+  },
+  "dependencies": {
+    "@temporalio/activity": "^1.10.0",
+    "@temporalio/worker": "^1.10.0",
+    "@temporalio/workflow": "^1.10.0",
+    "@temporalio/client": "^1.10.0",
+    "@google/generative-ai": "^0.21.0",
+    "googleapis": "^144.0.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "ts-node": "^10.9.2"
+  }
+}
