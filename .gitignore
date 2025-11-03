@@ -45,3 +45,6 @@ Thumbs.db
 
 # Test files
 test-submissions/
+
+# Grading results
+grading-results/

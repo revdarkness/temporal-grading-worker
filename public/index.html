@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grading Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      color: #666;
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+
+    .submissions-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .submission-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .submission-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .submission-header {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f0f0f0;
+      cursor: pointer;
+    }
+
+    .submission-title {
+      flex: 1;
+    }
+
+    .submission-title h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .submission-date {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .score-badge {
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .score-badge.passed {
+      background: #10b981;
+      color: white;
+    }
+
+    .score-badge.failed {
+      background: #ef4444;
+      color: white;
+    }
+
+    .score-percentage {
+      font-size: 1.3rem;
+      display: block;
+    }
+
+    .submission-details {
+      padding: 20px;
+      display: none;
+      background: #f9fafb;
+    }
+
+    .submission-details.show {
+      display: block;
+    }
+
+    .criteria-grid {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .criterion-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .criterion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .criterion-name {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .criterion-score {
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .criterion-feedback {
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .overall-feedback {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #764ba2;
+    }
+
+    .overall-feedback h4 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .overall-feedback p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 10px;
+      color: #666;
+    }
+
+    .no-results h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .loading {
+      text-align: center;
+      color: white;
+      padding: 40px;
+      font-size: 1.2rem;
+    }
+
+    .refresh-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .refreshing {
+      animation: pulse 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Grading Dashboard</h1>
+      <div class="subtitle">Real-time submission grading results</div>
+      <div class="refresh-badge" id="refreshBadge">Auto-refresh: 10s</div>
+    </header>
+
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card">
+        <div class="stat-number" id="totalSubmissions">-</div>
+        <div class="stat-label">Total Submissions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="passedSubmissions">-</div>
+        <div class="stat-label">Passed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="averageScore">-</div>
+        <div class="stat-label">Average Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="passRate">-</div>
+        <div class="stat-label">Pass Rate</div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="loading">Loading results...</div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

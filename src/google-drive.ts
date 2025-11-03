@@ -90,7 +90,7 @@ export class GoogleDriveService {
         fileName: file.name,
         fileContent,
         submittedBy: file.owners?.[0]?.emailAddress || 'Unknown',
-        submittedAt: new Date(file.createdTime),
+        submittedAt: file.createdTime || new Date().toISOString(),
         mimeType: file.mimeType,
       };
     } catch (error) {

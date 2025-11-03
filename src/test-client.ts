@@ -77,7 +77,7 @@ async function runTestWorkflow() {
     console.log(`Score: ${result.totalScore}/${result.maxScore} (${result.percentage.toFixed(1)}%)`);
     console.log(`Status: ${result.passed ? 'PASSED' : 'NEEDS IMPROVEMENT'}`);
     console.log('\nDetailed Scores:');
-    result.criteriaScores.forEach((cs) => {
+    result.criteriaScores.forEach((cs: any) => {
       console.log(`  ${cs.criterionName}: ${cs.score}/${cs.maxScore}`);
       console.log(`    ${cs.feedback}`);
     });

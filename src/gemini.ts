@@ -12,7 +12,7 @@ export class GeminiGradingService {
     }
 
     this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    this.model = this.genAI.getGenerativeModel({ model: 'gemini-pro-latest' });
   }
 
   async gradeSubmission(submission: Submission, rubric: Rubric): Promise<GradingResult> {
@@ -41,7 +41,10 @@ export class GeminiGradingService {
     prompt += `SUBMISSION DETAILS:\n`;
     prompt += `File Name: ${submission.fileName}\n`;
     prompt += `Submitted By: ${submission.submittedBy}\n`;
-    prompt += `Submitted At: ${submission.submittedAt.toISOString()}\n\n`;
+    const submittedAtDate = typeof submission.submittedAt === 'string'
+      ? submission.submittedAt
+      : submission.submittedAt.toISOString();
+    prompt += `Submitted At: ${submittedAtDate}\n\n`;
 
     prompt += `SUBMISSION CONTENT:\n`;
     prompt += `${'='.repeat(80)}\n`;
