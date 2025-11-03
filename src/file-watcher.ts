@@ -1,8 +1,8 @@
 import { Connection, Client } from '@temporalio/client';
 import { GoogleDriveService } from './google-drive';
 import { Rubric, GradingWorkflowInput } from './types';
+import { RubricParser } from './rubric-parser';
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
 
 // Load environment variables
 dotenv.config();
@@ -39,16 +39,16 @@ const defaultRubric: Rubric = {
 };
 
 async function loadRubric(): Promise<Rubric> {
-  const rubricPath = './rubric.json';
+  const rubricPath = process.env.RUBRIC_FILE || './rubric.json';
 
-  if (fs.existsSync(rubricPath)) {
+  try {
     console.log(`Loading rubric from ${rubricPath}`);
-    const rubricContent = fs.readFileSync(rubricPath, 'utf-8');
-    return JSON.parse(rubricContent);
+    return RubricParser.loadRubric(rubricPath);
+  } catch (error) {
+    console.error(`Error loading rubric from ${rubricPath}:`, error);
+    console.log('Using default rubric');
+    return defaultRubric;
   }
-
-  console.log('Using default rubric');
-  return defaultRubric;
 }
 
 async function watchFolder() {

@@ -1,0 +1,22 @@
+TOTAL POINTS: 100
+PASSING SCORE: 70
+
+CRITERION: Content and Understanding
+POINTS: 30
+DESCRIPTION: Demonstrates clear understanding of the topic with accurate, relevant, and thorough information. All required elements are present and well-developed.
+
+CRITERION: Organization and Structure
+POINTS: 20
+DESCRIPTION: Content is logically organized with clear introduction, body, and conclusion. Ideas flow smoothly with effective transitions.
+
+CRITERION: Analysis and Critical Thinking
+POINTS: 25
+DESCRIPTION: Shows depth of analysis, critical thinking, and original insights. Makes connections between ideas and supports arguments with evidence.
+
+CRITERION: Writing Quality and Clarity
+POINTS: 15
+DESCRIPTION: Writing is clear, concise, and professional. Grammar, spelling, and punctuation are correct.
+
+CRITERION: Sources and Citations
+POINTS: 10
+DESCRIPTION: Uses credible sources appropriately. Citations are properly formatted. Demonstrates research and integration of external information.
