@@ -9,7 +9,9 @@
     "dev": "ts-node src/worker.ts",
     "watch": "ts-node src/file-watcher.ts",
     "test": "ts-node src/test-client.ts",
-    "dashboard": "ts-node src/dashboard.ts"
+    "dashboard": "ts-node src/dashboard.ts",
+    "start-all": "bash start-all.sh",
+    "stop-all": "bash stop-all.sh"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
