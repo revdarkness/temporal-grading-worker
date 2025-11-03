@@ -14,6 +14,9 @@ const PORT = process.env.DASHBOARD_PORT || 3001;
 // Enable CORS
 app.use(cors());
 
+// Parse JSON request bodies
+app.use(express.json());
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -142,6 +145,80 @@ app.get('/api/results', (req, res) => {
   } catch (error) {
     console.error('Error fetching results:', error);
     res.status(500).json({ error: 'Failed to fetch results' });
+  }
+});
+
+/**
+ * API endpoint to get current configuration
+ */
+app.get('/api/config', (req, res) => {
+  try {
+    const config = {
+      folderId: process.env.GOOGLE_DRIVE_FOLDER_ID || '',
+      rubricFile: process.env.RUBRIC_FILE || './rubric.json',
+      pollingInterval: process.env.POLLING_INTERVAL || '60000',
+    };
+    res.json(config);
+  } catch (error) {
+    console.error('Error fetching config:', error);
+    res.status(500).json({ error: 'Failed to fetch configuration' });
+  }
+});
+
+/**
+ * API endpoint to update configuration
+ */
+app.post('/api/config', (req, res) => {
+  try {
+    const { folderId, rubricFile } = req.body;
+
+    if (!folderId || !rubricFile) {
+      return res.status(400).json({ error: 'folderId and rubricFile are required' });
+    }
+
+    // Read current .env file
+    const envPath = path.join(process.cwd(), '.env');
+    let envContent = '';
+
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, 'utf-8');
+    }
+
+    // Update or add GOOGLE_DRIVE_FOLDER_ID
+    if (envContent.includes('GOOGLE_DRIVE_FOLDER_ID=')) {
+      envContent = envContent.replace(
+        /GOOGLE_DRIVE_FOLDER_ID=.*/,
+        `GOOGLE_DRIVE_FOLDER_ID=${folderId}`
+      );
+    } else {
+      envContent += `\nGOOGLE_DRIVE_FOLDER_ID=${folderId}`;
+    }
+
+    // Update or add RUBRIC_FILE
+    if (envContent.includes('RUBRIC_FILE=')) {
+      envContent = envContent.replace(
+        /RUBRIC_FILE=.*/,
+        `RUBRIC_FILE=${rubricFile}`
+      );
+    } else {
+      envContent += `\nRUBRIC_FILE=${rubricFile}`;
+    }
+
+    // Write updated .env file
+    fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf-8');
+
+    // Update process.env for current process
+    process.env.GOOGLE_DRIVE_FOLDER_ID = folderId;
+    process.env.RUBRIC_FILE = rubricFile;
+
+    res.json({
+      success: true,
+      message: 'Configuration updated. Please restart the file watcher for changes to take effect.',
+      config: { folderId, rubricFile }
+    });
+  } catch (error) {
+    console.error('Error updating config:', error);
+    res.status(500).json({ error: 'Failed to update configuration' });
   }
 });
 
