@@ -1,10 +1,15 @@
+import * as dotenv from 'dotenv';
+
+// Load environment variables first
+dotenv.config();
+
 import express from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import cors from 'cors';
 
 const app = express();
-const PORT = process.env.DASHBOARD_PORT || 3000;
+const PORT = process.env.DASHBOARD_PORT || 3001;
 
 // Enable CORS
 app.use(cors());
